@@ -10,3 +10,13 @@ how to benchmark:
 - we can consider this a baseline.
 - Very Basic.
 
+
+3dbf6f2:
+- removing row allocations mattered in GEMV. faster.
+- GEMV is memory/allocation sensative.
+- Did not affect GEMM however.
+
+0a23706:
+- adding blocking to GEMM implementation (Tiling).
+- minor speedup.
+- best config so far (16, 8, 16) -> (rows tile, cols tile, inner (k-dimension) tile)

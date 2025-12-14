@@ -168,35 +168,77 @@ namespace he
                                       const std::vector<std::uint64_t> &B,
                                       std::size_t B_cols)
   {
-    std::vector<bi::BigInt> enc_C;
-    enc_C.reserve(A_rows * B_cols);
-
     // shape checks
     if (enc_A.size() != A_rows * A_cols)
       return {};
     if (B.size() != A_cols * B_cols)
       return {};
 
-    // For each output cell C[i,k] = sum_j A[i,j] * B[j,k]
-    for (std::size_t i = 0; i < A_rows; ++i)
+    // Output C (row-major)
+    std::vector<bi::BigInt> enc_C(A_rows * B_cols);
+
+    // --- block sizes (tune these later using benchmarks) ---
+    const std::size_t Bi = 16;  // rows tile
+    const std::size_t Bk = 8;  // cols tile
+    const std::size_t Bj = 16; // inner (k-dimension) tile
+
+    // Blocked triple-loop: (i,k) tiles, accumulate over j in blocks
+    for (std::size_t i0 = 0; i0 < A_rows; i0 += Bi)
     {
-      for (std::size_t k = 0; k < B_cols; ++k)
+      const std::size_t i_max = std::min(A_rows, i0 + Bi);
+
+      for (std::size_t k0 = 0; k0 < B_cols; k0 += Bk)
       {
-        // Accumulate encrypted sum using ciphertext multiplication identity Enc(0)=1
-        bi::BigInt acc = bi::BigInt::from_u64(1);
+        const std::size_t k_max = std::min(B_cols, k0 + Bk);
 
-        for (std::size_t j = 0; j < A_cols; ++j)
+        // Temporary accumulators for this (i0..i_max-1, k0..k_max-1) tile
+        const std::size_t ti = i_max - i0;
+        const std::size_t tk = k_max - k0;
+        std::vector<bi::BigInt> acc(ti * tk, bi::BigInt::from_u64(1)); // Enc(0) identity
+
+        for (std::size_t j0 = 0; j0 < A_cols; j0 += Bj)
         {
-          const auto &enc_aij = enc_A[i * A_cols + j];
-          std::uint64_t b_jk = B[j * B_cols + k];
+          const std::size_t j_max = std::min(A_cols, j0 + Bj);
 
-          auto term = he::scale(pk, enc_aij, b_jk); // Enc(Aij * Bjk)
-          acc = he::add(pk, acc, term);             // Enc(sum + term)
+          for (std::size_t i = i0; i < i_max; ++i)
+          {
+            const std::size_t a_row = i * A_cols;
+
+            for (std::size_t j = j0; j < j_max; ++j)
+            {
+              const bi::BigInt &enc_aij = enc_A[a_row + j];
+
+              // Multiply-accumulate into each k in the tile
+              const std::size_t b_row = j * B_cols;
+              for (std::size_t k = k0; k < k_max; ++k)
+              {
+                const std::uint64_t b_jk = B[b_row + k];
+
+                // term = Enc(Aij * Bjk) = Enc(Aij)^Bjk
+                bi::BigInt term = he::scale(pk, enc_aij, b_jk);
+
+                // acc = Enc(sum + term) via ciphertext multiplication
+                const std::size_t ai = i - i0;
+                const std::size_t ak = k - k0;
+                acc[ai * tk + ak] = he::add(pk, acc[ai * tk + ak], term);
+              }
+            }
+          }
         }
 
-        enc_C.push_back(acc);
+        // Store this tile back into enc_C
+        for (std::size_t i = i0; i < i_max; ++i)
+        {
+          for (std::size_t k = k0; k < k_max; ++k)
+          {
+            const std::size_t ai = i - i0;
+            const std::size_t ak = k - k0;
+            enc_C[i * B_cols + k] = acc[ai * tk + ak];
+          }
+        }
       }
     }
+
     return enc_C;
   }
 }
