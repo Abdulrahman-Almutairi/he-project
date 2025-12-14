@@ -11,6 +11,10 @@ add_library(paillierhe
 )
 target_include_directories(paillierhe PUBLIC include)
 
+add_executable(bench_all bench/bench_all.cpp)
+target_link_libraries(bench_all PRIVATE paillierhe)
+set_target_properties(bench_all PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bench)
+
 add_executable(he_cli tools/he_cli.cpp)
 target_link_libraries(he_cli PRIVATE paillierhe)
 set_target_properties(he_cli PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

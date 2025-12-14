@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include <cstdint>
 #include "bigint/bigint.h"
 
 namespace he
@@ -26,4 +28,18 @@ namespace he
 
   bi::BigInt add(const PublicKey &pk, const bi::BigInt &c1, const bi::BigInt &c2); // homomorphic addition
   bi::BigInt scale(const PublicKey &pk, const bi::BigInt &c, std::uint64_t k);
+
+  bi::BigInt enc_dot_cp(const PublicKey &pk, const std::vector<bi::BigInt> &enc_a, const std::vector<std::uint64_t> &b);
+  std::vector<bi::BigInt> enc_gemv_cp(const PublicKey &pk, 
+                                      const std::vector<bi::BigInt> &enc_A, 
+                                      std::size_t rows, 
+                                      std::size_t cols, 
+                                      const std::vector<std::uint64_t> &x);
+
+  std::vector<bi::BigInt> enc_gemm_cp(const PublicKey& pk,
+                                      const std::vector<bi::BigInt>& enc_A,
+                                      std::size_t A_rows,
+                                      std::size_t A_cols,
+                                      const std::vector<std::uint64_t>& B,
+                                      std::size_t B_cols);
 }

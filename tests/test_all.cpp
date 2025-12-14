@@ -5,6 +5,105 @@
 #include "paillier/paillier.h"
 #include <vector>
 
+void test_enc_gemm_cp() {
+  auto kp = he::keygen(2048);
+  std::uint64_t n = bi::to_u64(kp.pk.n);
+
+  // A (2x3):
+  // [1 2 3
+  //  4 5 6]
+  std::size_t A_rows = 2, A_cols = 3;
+  std::vector<std::uint64_t> A_plain = {1,2,3, 4,5,6};
+
+  std::vector<bi::BigInt> enc_A;
+  enc_A.reserve(A_plain.size());
+  for (auto v : A_plain) enc_A.push_back(he::encrypt(kp.pk, v % n));
+
+  // B (3x2):
+  // [7  8
+  //  9 10
+  // 11 12]
+  std::size_t B_cols = 2;
+  std::vector<std::uint64_t> B = {7,8, 9,10, 11,12}; // row-major (3x2)
+
+  // Expected C = A*B (2x2):
+  // C00 = 1*7 + 2*9 + 3*11 = 58
+  // C01 = 1*8 + 2*10+ 3*12 = 64
+  // C10 = 4*7 + 5*9 + 6*11 = 139
+  // C11 = 4*8 + 5*10+ 6*12 = 154
+  auto enc_C = he::enc_gemm_cp(kp.pk, enc_A, A_rows, A_cols, B, B_cols);
+  assert(enc_C.size() == A_rows * B_cols);
+
+  auto c00 = he::decrypt_u64(kp.pk, kp.sk, enc_C[0]);
+  auto c01 = he::decrypt_u64(kp.pk, kp.sk, enc_C[1]);
+  auto c10 = he::decrypt_u64(kp.pk, kp.sk, enc_C[2]);
+  auto c11 = he::decrypt_u64(kp.pk, kp.sk, enc_C[3]);
+
+  assert(c00 == (58  % n));
+  assert(c01 == (64  % n));
+  assert(c10 == (139 % n));
+  assert(c11 == (154 % n));
+
+  std::cout << "Encrypted GEMM (c×p) passed.\n";
+}
+
+
+void test_enc_gemv_cp() {
+  auto kp = he::keygen(2048);
+  std::uint64_t n = bi::to_u64(kp.pk.n);
+
+  // A = [[1,2,3],
+  //      [4,5,6]]
+  std::size_t rows = 2, cols = 3;
+  std::vector<std::uint64_t> A_plain = {1,2,3, 4,5,6};
+  std::vector<bi::BigInt> enc_A;
+  enc_A.reserve(A_plain.size());
+  for (auto v : A_plain) enc_A.push_back(he::encrypt(kp.pk, v % n));
+
+  // x = [7,8,9]
+  std::vector<std::uint64_t> x = {7,8,9};
+
+  // y = A*x = [1*7+2*8+3*9, 4*7+5*8+6*9] = [50, 122]
+  auto enc_y = he::enc_gemv_cp(kp.pk, enc_A, rows, cols, x);
+  assert(enc_y.size() == rows);
+
+  auto y0 = he::decrypt_u64(kp.pk, kp.sk, enc_y[0]);
+  auto y1 = he::decrypt_u64(kp.pk, kp.sk, enc_y[1]);
+
+  assert(y0 == (50 % n));
+  assert(y1 == (122 % n));
+
+  std::cout << "Encrypted GEMV (c×p) passed.\n";
+}
+
+
+void test_enc_dot_cp()
+{
+  auto kp = he::keygen(2048);
+  std::uint64_t n = bi::to_u64(kp.pk.n);
+
+  // plaintext vectors
+  std::vector<std::uint64_t> a = {2, 3, 4};
+  std::vector<std::uint64_t> b = {5, 6, 7};
+
+  // encrypt a
+  std::vector<bi::BigInt> enc_a;
+  for (auto x : a)
+    enc_a.push_back(he::encrypt(kp.pk, x % n));
+
+  // compute Enc(dot)
+  auto c = he::enc_dot_cp(kp.pk, enc_a, b);
+
+  // decrypt result
+  auto d = he::decrypt_u64(kp.pk, kp.sk, c);
+
+  // expected dot
+  std::uint64_t expected = (2 * 5 + 3 * 6 + 4 * 7) % n; // 10+18+28=56
+  assert(d == expected);
+
+  std::cout << "Encrypted dot-product (c×p) passed.\n";
+}
+
 void test_homomorphic_add_scale()
 {
   auto kp = he::keygen(2048);
@@ -74,6 +173,9 @@ int main()
   test_pow_mod();
   test_paillier_roundtrip();
   test_homomorphic_add_scale();
+  test_enc_dot_cp();
+  test_enc_gemv_cp();
+  test_enc_gemm_cp();
   std::cout << "All tests passed.\n";
 
   // std::cout << "lol.\n";
