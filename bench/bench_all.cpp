@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
   const std::string ts     = get_arg(argc, argv, "--timestamp", "unknown");
 
   std::uint64_t key_bits = parse_u64(get_arg(argc, argv, "--key_bits", "2048"), 2048);
-  std::size_t trials     = parse_sz(get_arg(argc, argv, "--trials", "20"), 20);
+  std::size_t trials     = parse_sz(get_arg(argc, argv, "--trials", "50"), 50);
 
   std::size_t dot_n   = parse_sz(get_arg(argc, argv, "--dot_n", "256"), 256);
   std::size_t rows    = parse_sz(get_arg(argc, argv, "--rows",  "64"), 64);

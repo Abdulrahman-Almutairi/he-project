@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 #include <stdexcept>
+#include <algorithm>
 
 namespace he
 {
@@ -134,13 +135,19 @@ namespace he
                                       const std::vector<std::uint64_t> &x)
   {
     std::vector<bi::BigInt> y;
+
+    // shape checks
     if (x.size() != cols || enc_A.size() != rows * cols)
     {
       return y; // empty indicates mismatch
     }
 
-    y.reserve(rows);
+    // Pre-size output so each thread writes to y[i] safely
+    y.resize(rows);
 
+    #ifdef _OPENMP
+    #pragma omp parallel for schedule(static)
+    #endif
     for (std::size_t i = 0; i < rows; ++i)
     {
       // Enc(0) identity under ciphertext multiplication is 1 mod n^2
@@ -149,13 +156,14 @@ namespace he
       const std::size_t row_off = i * cols;
       for (std::size_t j = 0; j < cols; ++j)
       {
-        // term = Enc(A[i,j] * x[j]) = Enc(A[i,j]) ^ x[j]
+        // Enc(Aij * xj) = Enc(Aij) ^ xj
         bi::BigInt term = he::scale(pk, enc_A[row_off + j], x[j]);
-        // acc = Enc(sum + Aij*xj)  (ciphertext multiply)
+
+        // Accumulate: Enc(sum) = Enc(sum) * Enc(term)
         acc = he::add(pk, acc, term);
       }
 
-      y.push_back(acc);
+      y[i] = acc;
     }
 
     return y;
@@ -177,29 +185,36 @@ namespace he
     // Output C (row-major)
     std::vector<bi::BigInt> enc_C(A_rows * B_cols);
 
-    // --- block sizes (tune these later using benchmarks) ---
-    const std::size_t Bi = 16;  // rows tile
+    // --- block sizes (tune later) ---
+    const std::size_t Bi = 16; // rows tile
     const std::size_t Bk = 8;  // cols tile
-    const std::size_t Bj = 16; // inner (k-dimension) tile
+    const std::size_t Bj = 16; // inner (shared) dimension tile
 
-    // Blocked triple-loop: (i,k) tiles, accumulate over j in blocks
+// Parallelize across (i0,k0) tiles (independent)
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2) schedule(static)
+#endif
     for (std::size_t i0 = 0; i0 < A_rows; i0 += Bi)
     {
-      const std::size_t i_max = std::min(A_rows, i0 + Bi);
-
       for (std::size_t k0 = 0; k0 < B_cols; k0 += Bk)
       {
+
+        const std::size_t i_max = std::min(A_rows, i0 + Bi);
         const std::size_t k_max = std::min(B_cols, k0 + Bk);
 
-        // Temporary accumulators for this (i0..i_max-1, k0..k_max-1) tile
         const std::size_t ti = i_max - i0;
         const std::size_t tk = k_max - k0;
-        std::vector<bi::BigInt> acc(ti * tk, bi::BigInt::from_u64(1)); // Enc(0) identity
 
+        // Accumulators for this output tile.
+        // Enc(0) identity under ciphertext multiplication is 1 mod n^2.
+        std::vector<bi::BigInt> acc(ti * tk, bi::BigInt::from_u64(1));
+
+        // Iterate over the shared dimension in blocks
         for (std::size_t j0 = 0; j0 < A_cols; j0 += Bj)
         {
           const std::size_t j_max = std::min(A_cols, j0 + Bj);
 
+          // Multiply-accumulate into this tile
           for (std::size_t i = i0; i < i_max; ++i)
           {
             const std::size_t a_row = i * A_cols;
@@ -207,17 +222,16 @@ namespace he
             for (std::size_t j = j0; j < j_max; ++j)
             {
               const bi::BigInt &enc_aij = enc_A[a_row + j];
-
-              // Multiply-accumulate into each k in the tile
               const std::size_t b_row = j * B_cols;
+
               for (std::size_t k = k0; k < k_max; ++k)
               {
                 const std::uint64_t b_jk = B[b_row + k];
 
-                // term = Enc(Aij * Bjk) = Enc(Aij)^Bjk
+                // Enc(Aij * Bjk) = Enc(Aij) ^ Bjk
                 bi::BigInt term = he::scale(pk, enc_aij, b_jk);
 
-                // acc = Enc(sum + term) via ciphertext multiplication
+                // Enc(sum + term) = Enc(sum) * Enc(term)
                 const std::size_t ai = i - i0;
                 const std::size_t ak = k - k0;
                 acc[ai * tk + ak] = he::add(pk, acc[ai * tk + ak], term);
@@ -226,7 +240,7 @@ namespace he
           }
         }
 
-        // Store this tile back into enc_C
+        // Store the tile to output
         for (std::size_t i = i0; i < i_max; ++i)
         {
           for (std::size_t k = k0; k < k_max; ++k)
@@ -241,4 +255,5 @@ namespace he
 
     return enc_C;
   }
+
 }

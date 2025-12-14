@@ -20,3 +20,8 @@ how to benchmark:
 - adding blocking to GEMM implementation (Tiling).
 - minor speedup.
 - best config so far (16, 8, 16) -> (rows tile, cols tile, inner (k-dimension) tile)
+
+da9e0fc:
+- added openMp to GEMM, huge speed up.
+- OMP num of threads for benchmarking: 8
+- Pragma omp parallel loop collapse(2)
