@@ -127,59 +127,68 @@ namespace he
     return acc;
   }
 
-  std::vector<bi::BigInt> enc_gemv_cp(const PublicKey &pk, 
-                                      const std::vector<bi::BigInt> &enc_A, 
-                                      std::size_t rows, 
-                                      std::size_t cols, 
+  std::vector<bi::BigInt> enc_gemv_cp(const PublicKey &pk,
+                                      const std::vector<bi::BigInt> &enc_A,
+                                      std::size_t rows,
+                                      std::size_t cols,
                                       const std::vector<std::uint64_t> &x)
   {
     std::vector<bi::BigInt> y;
-    y.reserve(rows);
-
     if (x.size() != cols || enc_A.size() != rows * cols)
     {
       return y; // empty indicates mismatch
     }
 
+    y.reserve(rows);
+
     for (std::size_t i = 0; i < rows; ++i)
     {
-      // slice row i
-      std::vector<bi::BigInt> row;
-      row.reserve(cols);
+      // Enc(0) identity under ciphertext multiplication is 1 mod n^2
+      bi::BigInt acc = bi::BigInt::from_u64(1);
+
+      const std::size_t row_off = i * cols;
       for (std::size_t j = 0; j < cols; ++j)
       {
-        row.push_back(enc_A[i * cols + j]);
+        // term = Enc(A[i,j] * x[j]) = Enc(A[i,j]) ^ x[j]
+        bi::BigInt term = he::scale(pk, enc_A[row_off + j], x[j]);
+        // acc = Enc(sum + Aij*xj)  (ciphertext multiply)
+        acc = he::add(pk, acc, term);
       }
 
-      // Enc(dot(row, x))
-      y.push_back(enc_dot_cp(pk, row, x));
+      y.push_back(acc);
     }
 
     return y;
   }
 
-    std::vector<bi::BigInt> enc_gemm_cp(const PublicKey& pk,
-                                      const std::vector<bi::BigInt>& enc_A,
+  std::vector<bi::BigInt> enc_gemm_cp(const PublicKey &pk,
+                                      const std::vector<bi::BigInt> &enc_A,
                                       std::size_t A_rows,
                                       std::size_t A_cols,
-                                      const std::vector<std::uint64_t>& B,
-                                      std::size_t B_cols) {
+                                      const std::vector<std::uint64_t> &B,
+                                      std::size_t B_cols)
+  {
     std::vector<bi::BigInt> enc_C;
     enc_C.reserve(A_rows * B_cols);
 
     // shape checks
-    if (enc_A.size() != A_rows * A_cols) return {};
-    if (B.size() != A_cols * B_cols)     return {};
+    if (enc_A.size() != A_rows * A_cols)
+      return {};
+    if (B.size() != A_cols * B_cols)
+      return {};
 
     // For each output cell C[i,k] = sum_j A[i,j] * B[j,k]
-    for (std::size_t i = 0; i < A_rows; ++i) {
-      for (std::size_t k = 0; k < B_cols; ++k) {
+    for (std::size_t i = 0; i < A_rows; ++i)
+    {
+      for (std::size_t k = 0; k < B_cols; ++k)
+      {
         // Accumulate encrypted sum using ciphertext multiplication identity Enc(0)=1
         bi::BigInt acc = bi::BigInt::from_u64(1);
 
-        for (std::size_t j = 0; j < A_cols; ++j) {
-          const auto& enc_aij = enc_A[i * A_cols + j];
-          std::uint64_t b_jk  = B[j * B_cols + k];
+        for (std::size_t j = 0; j < A_cols; ++j)
+        {
+          const auto &enc_aij = enc_A[i * A_cols + j];
+          std::uint64_t b_jk = B[j * B_cols + k];
 
           auto term = he::scale(pk, enc_aij, b_jk); // Enc(Aij * Bjk)
           acc = he::add(pk, acc, term);             // Enc(sum + term)
