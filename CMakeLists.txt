@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.16)
+project(PaillierHE LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_library(paillierhe
+  src/bigint/bigint.cpp
+  src/bigint/mul_schoolbook.cpp
+  src/bigint/mod_arith.cpp
+  src/paillier/paillier.cpp
+)
+target_include_directories(paillierhe PUBLIC include)
+
+add_executable(he_cli tools/he_cli.cpp)
+target_link_libraries(he_cli PRIVATE paillierhe)
+set_target_properties(he_cli PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+add_executable(test_all tests/test_all.cpp)
+target_link_libraries(test_all PRIVATE paillierhe)
+set_target_properties(test_all PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests)
