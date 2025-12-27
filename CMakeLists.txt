@@ -7,6 +7,7 @@ add_library(paillierhe
   src/bigint/bigint.cpp
   src/bigint/mul_schoolbook.cpp
   src/bigint/mod_arith.cpp
+  src/bigint/montgomery.cpp
   src/paillier/paillier.cpp
 )
 target_include_directories(paillierhe PUBLIC include)

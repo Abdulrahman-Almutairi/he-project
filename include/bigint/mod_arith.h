@@ -21,4 +21,8 @@ namespace bi {
     BigInt mul_mod(const BigInt& a, const BigInt& b, const BigInt& mod);
     // Modular exponent (base ^ exp) % mod  -- naive
     BigInt pow_mod(BigInt base, std::uint64_t exp, const BigInt& mod);
+
+    // big exponent
+    bi::BigInt pow_mod_bigexp(BigInt base, const BigInt& exp, const BigInt& mod);
+
 }

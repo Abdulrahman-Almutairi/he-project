@@ -1,4 +1,5 @@
 #include "bigint/mod_arith.h"
+#include "bigint/montgomery.h"
 
 namespace bi
 {
@@ -62,6 +63,24 @@ namespace bi
             return r;
         }
 
+        // Montgomery path if modulus is odd
+        if (!mod.limbs.empty() && (mod.limbs[0] & 1ULL))
+        {
+            static thread_local bool inited = false;
+            static thread_local MontCtx ctx;
+            if (!inited || cmp(ctx.n, mod) != 0)
+            {
+                ctx = mont_ctx(mod);
+                inited = true;
+            }
+
+            // Convert to mont, multiply, convert back
+            auto A = to_mont(ctx, a);
+            auto B = to_mont(ctx, b);
+            auto C = mont_mul(ctx, A, B);
+            return from_mont(ctx, C);
+        }
+
         // generic (slow) fallback
         BigInt prod = mul_schoolbook(a, b);
         // static void mod_reduce(BigInt&, const BigInt&); // forward if needed
@@ -78,6 +97,12 @@ namespace bi
             std::uint64_t mv = mod.limbs[0];
             BigInt r = BigInt::from_u64(pow_mod_u64(bv, exp, mv));
             return r;
+        }
+
+        if (!mod.limbs.empty() && (mod.limbs[0] & 1ULL))
+        {
+            MontCtx ctx = mont_ctx(mod); // later: cache it
+            return mont_pow_u64(ctx, base, exp);
         }
 
         // generic (slow) fallback
@@ -116,8 +141,14 @@ namespace bi
         return (a / gcd_u64(a, b)) * b;
     }
 
-    static std::int64_t egcd_i64(std::int64_t a, std::int64_t b, std::int64_t& x, std::int64_t& y) {
-        if (b == 0) {x = 1; y= 0; return a;}
+    static std::int64_t egcd_i64(std::int64_t a, std::int64_t b, std::int64_t &x, std::int64_t &y)
+    {
+        if (b == 0)
+        {
+            x = 1;
+            y = 0;
+            return a;
+        }
         std::int64_t x1, y1;
         auto g = egcd_i64(b, a % b, x1, y1);
         x = y1;
@@ -125,13 +156,54 @@ namespace bi
         return g;
     }
 
-    bool modinv_u64(std::uint64_t a, std::uint64_t mod, std::uint64_t& inv_out) {
-        if (mod == 0) return false;
+    bool modinv_u64(std::uint64_t a, std::uint64_t mod, std::uint64_t &inv_out)
+    {
+        if (mod == 0)
+            return false;
         std::int64_t x, y;
         auto g = egcd_i64((std::int64_t)(a % mod), (std::int64_t)mod, x, y);
-        if (g != 1 && g != -1) return false;
+        if (g != 1 && g != -1)
+            return false;
         std::int64_t inv = x % (std::int64_t)mod;
         inv_out = (std::uint64_t)inv;
         return true;
+    }
+
+    static bool get_bit(const bi::BigInt &e, std::size_t bit)
+    {
+        std::size_t limb = bit / 64;
+        std::size_t off = bit % 64;
+        if (limb >= e.limbs.size())
+            return false;
+        return (e.limbs[limb] >> off) & 1ULL;
+    }
+
+    static std::size_t bitlen(const bi::BigInt &e)
+    {
+        if (e.limbs.empty())
+            return 0;
+        std::size_t i = e.limbs.size() - 1;
+        std::uint64_t top = e.limbs[i];
+        std::size_t bits = i * 64;
+        while (top)
+        {
+            top >>= 1;
+            bits++;
+        }
+        return bits;
+    }
+
+    bi::BigInt pow_mod_bigexp(bi::BigInt base, const bi::BigInt &exp, const bi::BigInt &mod)
+    {
+        bi::BigInt result = bi::BigInt::from_u64(1);
+
+        std::size_t bl = bitlen(exp);
+        for (std::size_t i = 0; i < bl; ++i)
+        {
+            if (get_bit(exp, i))
+                result = bi::mul_mod(result, base, mod);
+            base = bi::mul_mod(base, base, mod);
+        }
+        return result;
     }
 }

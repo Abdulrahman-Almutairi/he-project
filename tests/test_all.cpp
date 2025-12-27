@@ -5,6 +5,23 @@
 #include "paillier/paillier.h"
 #include <vector>
 
+void test_pow_mod_bigexp_matches_u64() {
+  using namespace bi;
+
+  BigInt mod  = BigInt::from_u64(65537);     // small odd modulus
+  BigInt base = BigInt::from_u64(12345);
+
+  // pick a small exponent we can represent as both u64 and BigInt
+  std::uint64_t e_u64 = 1234;
+  BigInt e_big = BigInt::from_u64(e_u64);
+
+  auto a = pow_mod(base, e_u64, mod);
+  auto b = pow_mod_bigexp(base, e_big, mod);
+
+  assert(to_u64(a) == to_u64(b));
+  std::cout << "pow_mod_bigexp matches pow_mod for small exponent.\n";
+}
+
 void test_enc_gemm_cp() {
   auto kp = he::keygen(2048);
   std::uint64_t n = bi::to_u64(kp.pk.n);
@@ -176,6 +193,7 @@ int main()
   test_enc_dot_cp();
   test_enc_gemv_cp();
   test_enc_gemm_cp();
+  test_pow_mod_bigexp_matches_u64();
   std::cout << "All tests passed.\n";
 
   // std::cout << "lol.\n";

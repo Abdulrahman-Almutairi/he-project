@@ -1,13 +1,13 @@
 # ninja log v5
-782	864	1765748716259924662	bench/bench_all	b597acd94939101
-782	865	1765748716259924662	bin/he_cli	d9351d7b260d5fe
-782	864	1765748716259924662	tests/test_all	71ae288965219401
-1	629	1765747681172087759	CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o	f50051f35ea2834a
-2	438	1765747680980087719	CMakeFiles/he_cli.dir/tools/he_cli.cpp.o	91e3e09155bd7954
-770	781	1765748716179924548	libpaillierhe.a	67298ede7bc52a39
-2	633	1765747681176087759	CMakeFiles/test_all.dir/tests/test_all.cpp.o	94124e938cca7b1a
-1	356	1765747680900087702	CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o	27b94f0b75820778
-1	769	1765748716163924526	CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o	aa51a13c8954dc78
-2	409	1765748720063930353	build.ninja	ce9cf328829bde67
-3	1267	1765747876896139775	CMakeFiles/bench_all.dir/bench/bench_all.cpp.o	5390c2e9c06c8e19
-1	391	1765747680932087709	CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o	49d16e0aa4adad42
+0	319	1766859053004231033	CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o	27b94f0b75820778
+1	400	1766859053084155392	CMakeFiles/he_cli.dir/tools/he_cli.cpp.o	91e3e09155bd7954
+0	400	1766859053088151610	CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o	49d16e0aa4adad42
+1	540	1766859053228019236	CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o	51326418df666e5e
+0	620	1766859053307943593	CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o	f50051f35ea2834a
+1	628	1766859053315936029	CMakeFiles/test_all.dir/tests/test_all.cpp.o	94124e938cca7b1a
+1	817	1766859053503758269	CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o	aa51a13c8954dc78
+817	833	1766859053519743141	libpaillierhe.a	b1bda4d3d2ac515f
+834	909	1766859053595671281	tests/test_all	71ae288965219401
+833	909	1766859053595671281	bin/he_cli	d9351d7b260d5fe
+1	1174	1766859053859421661	CMakeFiles/bench_all.dir/bench/bench_all.cpp.o	5390c2e9c06c8e19
+1175	1256	1766859053939346019	bench/bench_all	b597acd94939101

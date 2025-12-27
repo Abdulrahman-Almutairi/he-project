@@ -71,7 +71,7 @@ namespace he
 
     // 3) r^n mod n^2
     // std::uint64_t n_u64 = to_u64(pk.n);
-    BigInt rn = pow_mod(r, n_u64, pk.n2);
+    BigInt rn = pow_mod_bigexp(r, pk.n, pk.n2);
     // 4) multiply mod n^2
     BigInt c = bi::mul_mod(gm, rn, pk.n2);
     return c;
