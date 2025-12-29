@@ -24,6 +24,7 @@ namespace he
 
   KeyPair keygen(unsigned bits);                                                            // placeholder
   bi::BigInt encrypt(const PublicKey &pk, std::uint64_t m);                                 // placeholder
+  bi::BigInt decrypt(const PublicKey &pk, const SecretKey &sk, const bi::BigInt &c);
   std::uint64_t decrypt_u64(const PublicKey &pk, const SecretKey &sk, const bi::BigInt &c); // placeholder
 
   bi::BigInt add(const PublicKey &pk, const bi::BigInt &c1, const bi::BigInt &c2); // homomorphic addition

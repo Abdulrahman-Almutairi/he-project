@@ -8,6 +8,9 @@ add_library(paillierhe
   src/bigint/mul_schoolbook.cpp
   src/bigint/mod_arith.cpp
   src/bigint/montgomery.cpp
+  src/bigint/prime.cpp
+  src/bigint/inv.cpp
+  src/bigint/div_exact.cpp
   src/paillier/paillier.cpp
 )
 target_include_directories(paillierhe PUBLIC include)

@@ -1,0 +1,6 @@
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/paillierhe.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/bench_all.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/he_cli.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_all.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/edit_cache.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/rebuild_cache.dir

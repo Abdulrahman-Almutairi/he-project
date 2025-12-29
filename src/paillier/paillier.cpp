@@ -1,5 +1,8 @@
 #include "paillier/paillier.h"
 #include "bigint/mod_arith.h"
+#include "bigint/prime.h"
+#include "bigint/inv.h"
+#include "bigint/div_exact.h"
 #include <iostream>
 #include <random>
 #include <stdexcept>
@@ -14,6 +17,7 @@ namespace he
   using bi::mul_mod;
   using bi::mul_mod_u64;
   using bi::pow_mod;
+  using bi::pow_mod_bigexp;
   using bi::pow_mod_u64;
   using bi::to_u64;
 
@@ -21,33 +25,63 @@ namespace he
 
   KeyPair keygen(unsigned bits)
   {
-    (void)bits;
+    using namespace bi;
+
+    if (bits < 128)
+      bits = 128; // safety for demo
+
     KeyPair kp;
 
-    std::uint64_t p = 50021; // prime
-    std::uint64_t q = 50023; // prime
-    std::uint64_t n_u64 = p * q;
-    std::uint64_t n2_u64 = (std::uint64_t)((unsigned __int128)n_u64 * (unsigned __int128)n_u64);
+    std::random_device rd;
+    std::mt19937_64 rng(rd());
 
-    // Public key
-    kp.pk.n = to_big(n_u64);
-    kp.pk.n2 = to_big(n2_u64);
-    kp.pk.g = to_big(n_u64 + 1);
+    // 1) generate big primes p,q
+    BigInt p = generate_prime(bits / 2, rng, 20);
+    BigInt q = generate_prime(bits / 2, rng, 20);
+    while (cmp(p, q) == 0)
+    {
+      q = generate_prime(bits / 2, rng, 20);
+    }
 
-    // Private key: lambda and mu
-    std::uint64_t lambda_u64 = lcm_u64(p - 1, q - 1);
+    // 2) n = p*q, n^2 = n*n
+    BigInt n = mul_schoolbook(p, q);
+    BigInt n2 = mul_schoolbook(n, n);
 
-    // compute L (g ^ lambda mod n^2) = (u - 1) / n
-    std::uint64_t u = pow_mod_u64(n_u64 + 1, lambda_u64, n2_u64);
-    std::uint64_t L = (u - 1) / n_u64;
+    // 3) g = n + 1
+    BigInt g = n;
+    // g = bi::add_u64(g, 1); // if you don't have add_u64 globally, see note below
+    if (g.limbs.empty())
+      g.limbs.push_back(1);
+    else
+    {
+      std::uint64_t carry = 1;
+      for (std::size_t i = 0; i < g.limbs.size() && carry; ++i)
+      {
+        unsigned __int128 s = (unsigned __int128)g.limbs[i] + carry;
+        g.limbs[i] = (std::uint64_t)s;
+        carry = (std::uint64_t)(s >> 64);
+      }
+      if (carry)
+        g.limbs.push_back(carry);
+    }
+    g.normalize();
 
-    std::uint64_t mu_u64 = 0;
-    bool ok = modinv_u64(L % n_u64, n_u64, mu_u64);
-    if (!ok)
-      throw std::runtime_error("modinv failed in keygen (toy)");
+    // 4) lambda = (p-1)(q-1)  (works with g=n+1 trick)
+    BigInt pm1 = p;
+    sub_inplace(pm1, BigInt::from_u64(1));
+    BigInt qm1 = q;
+    sub_inplace(qm1, BigInt::from_u64(1));
+    BigInt lambda = mul_schoolbook(pm1, qm1);
 
-    kp.sk.lambda = to_big(lambda_u64);
-    kp.sk.mu = to_big(mu_u64);
+    // 5) mu = lambda^{-1} mod n
+    BigInt mu = inv_mod_odd(lambda, n);
+
+    kp.pk.n = n;
+    kp.pk.n2 = n2;
+    kp.pk.g = g;
+
+    kp.sk.lambda = lambda;
+    kp.sk.mu = mu;
 
     return kp;
   }
@@ -58,16 +92,37 @@ namespace he
     // 1) g^m mod n^2
     BigInt gm = pow_mod(pk.g, m, pk.n2);
     // 2) choose random r in [1, n-1] (dummy: 64-bit, no gcd check yet)
-    std::uint64_t n_u64 = to_u64(pk.n);
+    // BigInt r: random in [1, n-1], must be coprime with n.
+    // For now we generate random odd r < n and skip gcd check (acceptable for development);
+    // later we add BigInt gcd and enforce gcd(r,n)=1.
+
     std::random_device rd;
     std::mt19937_64 gen(rd());
-    std::uniform_int_distribution<std::uint64_t> dist(1, n_u64 - 1);
-    std::uint64_t r_u64 = 0;
-    do
+
+    // random r < n (rejection sampling by limbs)
+    auto rand_below = [&](const BigInt &limit) -> BigInt
     {
-      r_u64 = dist(gen);
-    } while (gcd_u64(r_u64, n_u64) != 1);
-    BigInt r = BigInt::from_u64(r_u64);
+      BigInt L = limit;
+      L.normalize();
+      BigInt x;
+      x.limbs.resize(L.limbs.size());
+      while (true)
+      {
+        for (std::size_t i = 0; i < x.limbs.size(); ++i)
+          x.limbs[i] = gen();
+        x.normalize();
+        if (bi::cmp(x, L) < 0 && !x.limbs.empty())
+          return x;
+      }
+    };
+
+    BigInt one = BigInt::from_u64(1);
+    BigInt n_minus_1 = pk.n;
+    bi::sub_inplace(n_minus_1, one);
+
+    BigInt r = rand_below(n_minus_1);
+    r.limbs[0] |= 1ULL; // make it odd
+    r.normalize();
 
     // 3) r^n mod n^2
     // std::uint64_t n_u64 = to_u64(pk.n);
@@ -77,25 +132,25 @@ namespace he
     return c;
   }
 
-  std::uint64_t decrypt_u64(const PublicKey &pk, const SecretKey &sk, const BigInt &c)
+  bi::BigInt decrypt(const PublicKey &pk, const SecretKey &sk, const BigInt &c)
   {
-    std::uint64_t n_u64 = to_u64(pk.n);
-    std::uint64_t n2_u64 = to_u64(pk.n2);
-    std::uint64_t lambda = to_u64(sk.lambda);
-    std::uint64_t mu = to_u64(sk.mu);
-
     // u = c^lambda mod n^2
-    // (since n^2 fits in u64, convert to u64 fast path cleanly)
-    std::uint64_t c_u64 = to_u64(c);
-    std::uint64_t u = pow_mod_u64(c_u64 % n2_u64, lambda, n2_u64);
+    BigInt u = bi::pow_mod_bigexp(c, sk.lambda, pk.n2);
 
     // L(u) = (u - 1) / n
-    std::uint64_t L = (u + n2_u64 - 1) % n2_u64; // safe (avoid underflow), but u>=1 anyway
-    L = L / n_u64;
+    BigInt u_minus_1 = u;
+    bi::sub_inplace(u_minus_1, BigInt::from_u64(1));
+    BigInt L = bi::div_exact(u_minus_1, pk.n);
 
-    // m = (L * mu) mod n
-    std::uint64_t m = mul_mod_u64(L % n_u64, mu, n_u64);
+    // m = L * mu mod n
+    BigInt m = bi::mul_mod(L, sk.mu, pk.n);
     return m;
+  }
+
+  std::uint64_t decrypt_u64(const PublicKey &pk, const SecretKey &sk, const BigInt &c)
+  {
+    BigInt m = decrypt(pk, sk, c);
+    return bi::to_u64(m); // safe if your plaintext fits in u64 (your tests do)
   }
 
   bi::BigInt add(const PublicKey &pk, const bi::BigInt &c1, const bi::BigInt &c2)
@@ -145,9 +200,9 @@ namespace he
     // Pre-size output so each thread writes to y[i] safely
     y.resize(rows);
 
-    #ifdef _OPENMP
-    #pragma omp parallel for schedule(static)
-    #endif
+#ifdef _OPENMP
+#pragma omp parallel for schedule(static)
+#endif
     for (std::size_t i = 0; i < rows; ++i)
     {
       // Enc(0) identity under ciphertext multiplication is 1 mod n^2

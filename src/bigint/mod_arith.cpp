@@ -1,5 +1,6 @@
 #include "bigint/mod_arith.h"
 #include "bigint/montgomery.h"
+#include <stdexcept>
 
 namespace bi
 {
@@ -15,6 +16,24 @@ namespace bi
     //     return 0;
     // }
 
+    static const MontCtx &mont_ctx_cached(const BigInt &mod)
+    {
+        static thread_local bool inited = false;
+        static thread_local MontCtx ctx;
+        static thread_local BigInt last_mod;
+
+        BigInt m = mod;
+        m.normalize();
+
+        if (!inited || cmp(last_mod, m) != 0)
+        {
+            ctx = mont_ctx(m);
+            last_mod = m;
+            inited = true;
+        }
+        return ctx;
+    }
+
     // extern bool sub_inplace(BigInt &a, const BigInt &b);
 
     // naive modular reduction by subtraction
@@ -22,10 +41,7 @@ namespace bi
     {
         // keep subtracting mod until x < mod
         // FIXME: replace with Montgomery
-        while (cmp(x, mod) >= 0)
-        {
-            sub_inplace(x, mod);
-        }
+        throw std::runtime_error("mod_reduce called: Montgomery path not used");
     }
 
     // 64-bit fast modular multiplication using 128-bit intermediate
@@ -66,15 +82,8 @@ namespace bi
         // Montgomery path if modulus is odd
         if (!mod.limbs.empty() && (mod.limbs[0] & 1ULL))
         {
-            static thread_local bool inited = false;
-            static thread_local MontCtx ctx;
-            if (!inited || cmp(ctx.n, mod) != 0)
-            {
-                ctx = mont_ctx(mod);
-                inited = true;
-            }
+            const MontCtx &ctx = mont_ctx_cached(mod);
 
-            // Convert to mont, multiply, convert back
             auto A = to_mont(ctx, a);
             auto B = to_mont(ctx, b);
             auto C = mont_mul(ctx, A, B);
@@ -101,7 +110,7 @@ namespace bi
 
         if (!mod.limbs.empty() && (mod.limbs[0] & 1ULL))
         {
-            MontCtx ctx = mont_ctx(mod); // later: cache it
+            const MontCtx &ctx = mont_ctx_cached(mod);
             return mont_pow_u64(ctx, base, exp);
         }
 

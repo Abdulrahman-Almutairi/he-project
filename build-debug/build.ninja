@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: PaillierHE
-# Configurations: Release
+# Configurations: Debug
 # =============================================================================
 
 #############################################
@@ -24,7 +24,7 @@ ninja_required_version = 1.5
 #############################################
 # Set configuration variable for custom commands.
 
-CONFIGURATION = Release
+CONFIGURATION = Debug
 # =============================================================================
 # Include auxiliary files.
 
@@ -39,7 +39,7 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /home/user1/dev/paillier-he/build/
+cmake_ninja_workdir = /home/user1/dev/paillier-he/build-debug/
 # =============================================================================
 # Object build statements for STATIC_LIBRARY target paillierhe
 
@@ -49,58 +49,58 @@ cmake_ninja_workdir = /home/user1/dev/paillier-he/build/
 
 build cmake_object_order_depends_target_paillierhe: phony || CMakeFiles/paillierhe.dir
 
-build CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o: CXX_COMPILER__paillierhe_unscanned_Release /home/user1/dev/paillier-he/src/bigint/bigint.cpp || cmake_object_order_depends_target_paillierhe
+build CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bigint/bigint.cpp || cmake_object_order_depends_target_paillierhe
   DEP_FILE = CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bigint
 
-build CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o: CXX_COMPILER__paillierhe_unscanned_Release /home/user1/dev/paillier-he/src/bigint/mul_schoolbook.cpp || cmake_object_order_depends_target_paillierhe
+build CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bigint/mul_schoolbook.cpp || cmake_object_order_depends_target_paillierhe
   DEP_FILE = CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bigint
 
-build CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o: CXX_COMPILER__paillierhe_unscanned_Release /home/user1/dev/paillier-he/src/bigint/mod_arith.cpp || cmake_object_order_depends_target_paillierhe
+build CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bigint/mod_arith.cpp || cmake_object_order_depends_target_paillierhe
   DEP_FILE = CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bigint
 
-build CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o: CXX_COMPILER__paillierhe_unscanned_Release /home/user1/dev/paillier-he/src/bigint/montgomery.cpp || cmake_object_order_depends_target_paillierhe
+build CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bigint/montgomery.cpp || cmake_object_order_depends_target_paillierhe
   DEP_FILE = CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bigint
 
-build CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o: CXX_COMPILER__paillierhe_unscanned_Release /home/user1/dev/paillier-he/src/bigint/prime.cpp || cmake_object_order_depends_target_paillierhe
+build CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bigint/prime.cpp || cmake_object_order_depends_target_paillierhe
   DEP_FILE = CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bigint
 
-build CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o: CXX_COMPILER__paillierhe_unscanned_Release /home/user1/dev/paillier-he/src/bigint/inv.cpp || cmake_object_order_depends_target_paillierhe
+build CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bigint/inv.cpp || cmake_object_order_depends_target_paillierhe
   DEP_FILE = CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bigint
 
-build CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o: CXX_COMPILER__paillierhe_unscanned_Release /home/user1/dev/paillier-he/src/bigint/div_exact.cpp || cmake_object_order_depends_target_paillierhe
+build CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bigint/div_exact.cpp || cmake_object_order_depends_target_paillierhe
   DEP_FILE = CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bigint
 
-build CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o: CXX_COMPILER__paillierhe_unscanned_Release /home/user1/dev/paillier-he/src/paillier/paillier.cpp || cmake_object_order_depends_target_paillierhe
+build CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/paillier/paillier.cpp || cmake_object_order_depends_target_paillierhe
   DEP_FILE = CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/paillier
@@ -113,8 +113,8 @@ build CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o: CXX_COMPILER__paill
 #############################################
 # Link the static library libpaillierhe.a
 
-build libpaillierhe.a: CXX_STATIC_LIBRARY_LINKER__paillierhe_Release CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o
-  LANGUAGE_COMPILE_FLAGS = -O3 -DNDEBUG
+build libpaillierhe.a: CXX_STATIC_LIBRARY_LINKER__paillierhe_Debug CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -130,9 +130,9 @@ build libpaillierhe.a: CXX_STATIC_LIBRARY_LINKER__paillierhe_Release CMakeFiles/
 
 build cmake_object_order_depends_target_bench_all: phony || cmake_object_order_depends_target_paillierhe
 
-build CMakeFiles/bench_all.dir/bench/bench_all.cpp.o: CXX_COMPILER__bench_all_unscanned_Release /home/user1/dev/paillier-he/bench/bench_all.cpp || cmake_object_order_depends_target_bench_all
+build CMakeFiles/bench_all.dir/bench/bench_all.cpp.o: CXX_COMPILER__bench_all_unscanned_Debug /home/user1/dev/paillier-he/bench/bench_all.cpp || cmake_object_order_depends_target_bench_all
   DEP_FILE = CMakeFiles/bench_all.dir/bench/bench_all.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/bench_all.dir
   OBJECT_FILE_DIR = CMakeFiles/bench_all.dir/bench
@@ -145,8 +145,8 @@ build CMakeFiles/bench_all.dir/bench/bench_all.cpp.o: CXX_COMPILER__bench_all_un
 #############################################
 # Link the executable bench/bench_all
 
-build bench/bench_all: CXX_EXECUTABLE_LINKER__bench_all_Release CMakeFiles/bench_all.dir/bench/bench_all.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
-  FLAGS = -O3 -DNDEBUG
+build bench/bench_all: CXX_EXECUTABLE_LINKER__bench_all_Debug CMakeFiles/bench_all.dir/bench/bench_all.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
   LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
   OBJECT_DIR = CMakeFiles/bench_all.dir
   POST_BUILD = :
@@ -163,9 +163,9 @@ build bench/bench_all: CXX_EXECUTABLE_LINKER__bench_all_Release CMakeFiles/bench
 
 build cmake_object_order_depends_target_he_cli: phony || cmake_object_order_depends_target_paillierhe
 
-build CMakeFiles/he_cli.dir/tools/he_cli.cpp.o: CXX_COMPILER__he_cli_unscanned_Release /home/user1/dev/paillier-he/tools/he_cli.cpp || cmake_object_order_depends_target_he_cli
+build CMakeFiles/he_cli.dir/tools/he_cli.cpp.o: CXX_COMPILER__he_cli_unscanned_Debug /home/user1/dev/paillier-he/tools/he_cli.cpp || cmake_object_order_depends_target_he_cli
   DEP_FILE = CMakeFiles/he_cli.dir/tools/he_cli.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/he_cli.dir
   OBJECT_FILE_DIR = CMakeFiles/he_cli.dir/tools
@@ -178,8 +178,8 @@ build CMakeFiles/he_cli.dir/tools/he_cli.cpp.o: CXX_COMPILER__he_cli_unscanned_R
 #############################################
 # Link the executable bin/he_cli
 
-build bin/he_cli: CXX_EXECUTABLE_LINKER__he_cli_Release CMakeFiles/he_cli.dir/tools/he_cli.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
-  FLAGS = -O3 -DNDEBUG
+build bin/he_cli: CXX_EXECUTABLE_LINKER__he_cli_Debug CMakeFiles/he_cli.dir/tools/he_cli.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
   LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
   OBJECT_DIR = CMakeFiles/he_cli.dir
   POST_BUILD = :
@@ -196,9 +196,9 @@ build bin/he_cli: CXX_EXECUTABLE_LINKER__he_cli_Release CMakeFiles/he_cli.dir/to
 
 build cmake_object_order_depends_target_test_all: phony || cmake_object_order_depends_target_paillierhe
 
-build CMakeFiles/test_all.dir/tests/test_all.cpp.o: CXX_COMPILER__test_all_unscanned_Release /home/user1/dev/paillier-he/tests/test_all.cpp || cmake_object_order_depends_target_test_all
+build CMakeFiles/test_all.dir/tests/test_all.cpp.o: CXX_COMPILER__test_all_unscanned_Debug /home/user1/dev/paillier-he/tests/test_all.cpp || cmake_object_order_depends_target_test_all
   DEP_FILE = CMakeFiles/test_all.dir/tests/test_all.cpp.o.d
-  FLAGS = -O3 -DNDEBUG -std=gnu++20 -fopenmp
+  FLAGS = -g -std=gnu++20 -fopenmp
   INCLUDES = -I/home/user1/dev/paillier-he/include
   OBJECT_DIR = CMakeFiles/test_all.dir
   OBJECT_FILE_DIR = CMakeFiles/test_all.dir/tests
@@ -211,8 +211,8 @@ build CMakeFiles/test_all.dir/tests/test_all.cpp.o: CXX_COMPILER__test_all_unsca
 #############################################
 # Link the executable tests/test_all
 
-build tests/test_all: CXX_EXECUTABLE_LINKER__test_all_Release CMakeFiles/test_all.dir/tests/test_all.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
-  FLAGS = -O3 -DNDEBUG
+build tests/test_all: CXX_EXECUTABLE_LINKER__test_all_Debug CMakeFiles/test_all.dir/tests/test_all.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
   LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
   OBJECT_DIR = CMakeFiles/test_all.dir
   POST_BUILD = :
@@ -225,7 +225,7 @@ build tests/test_all: CXX_EXECUTABLE_LINKER__test_all_Release CMakeFiles/test_al
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/user1/dev/paillier-he/build && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/user1/dev/paillier-he/build-debug && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -236,7 +236,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/user1/dev/paillier-he/build && /usr/bin/cmake --regenerate-during-build -S/home/user1/dev/paillier-he -B/home/user1/dev/paillier-he/build
+  COMMAND = cd /home/user1/dev/paillier-he/build-debug && /usr/bin/cmake --regenerate-during-build -S/home/user1/dev/paillier-he -B/home/user1/dev/paillier-he/build-debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -260,7 +260,7 @@ build test_all: phony tests/test_all
 # =============================================================================
 
 #############################################
-# Folder: /home/user1/dev/paillier-he/build
+# Folder: /home/user1/dev/paillier-he/build-debug
 
 build all: phony libpaillierhe.a bench/bench_all bin/he_cli tests/test_all
 
