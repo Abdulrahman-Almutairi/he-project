@@ -7,6 +7,63 @@
 #include "bigint/inv.h"
 #include <vector>
 
+void test_paillier_randomized_encryption_big()
+{
+  std::cout << "[paillier] randomized encryption test (256-bit)\n";
+
+  auto kp = he::keygen(256);
+
+  const std::uint64_t m = 42;
+
+  // Encrypt the same plaintext multiple times
+  auto c1 = he::encrypt(kp.pk, m);
+  auto c2 = he::encrypt(kp.pk, m);
+  auto c3 = he::encrypt(kp.pk, m);
+
+  // 1) Ciphertexts should differ (randomized encryption)
+  assert(bi::cmp(c1, c2) != 0);
+  assert(bi::cmp(c1, c3) != 0);
+  assert(bi::cmp(c2, c3) != 0);
+
+  // 2) All decrypt back to the same plaintext
+  auto d1 = he::decrypt_u64(kp.pk, kp.sk, c1);
+  auto d2 = he::decrypt_u64(kp.pk, kp.sk, c2);
+  auto d3 = he::decrypt_u64(kp.pk, kp.sk, c3);
+
+  assert(d1 == m);
+  assert(d2 == m);
+  assert(d3 == m);
+
+  // 3) Repeat several times to catch bad r (gcd issues)
+  for (int i = 0; i < 10; ++i)
+  {
+    auto c = he::encrypt(kp.pk, m);
+    auto d = he::decrypt_u64(kp.pk, kp.sk, c);
+    assert(d == m);
+  }
+
+  std::cout << "Paillier randomized encryption test passed.\n";
+}
+
+void test_encrypt_r_is_coprime()
+{
+  auto kp = he::keygen(256);
+
+  for (int i = 0; i < 20; ++i)
+  {
+    auto c = he::encrypt(kp.pk, 42);
+    (void)c; // encryption succeeded => r was invertible in practice
+
+    // Stronger check would require exposing r, but we can still sanity-check:
+    // if gcd constraint fails, encryption can produce invalid ciphertext group elements.
+    // Here we at least ensure decrypt works reliably for multiple trials.
+    auto d = he::decrypt_u64(kp.pk, kp.sk, c);
+    assert(d == 42);
+  }
+
+  std::cout << "Encrypt r∈Z*_n test passed.\n";
+}
+
 void test_paillier_roundtrip_big()
 {
   auto kp = he::keygen(256);
@@ -32,15 +89,19 @@ void test_paillier_key_sanity_512()
   // g must be n+1
   bi::BigInt g_expected = kp.pk.n;
   // +1
-  if (g_expected.limbs.empty()) g_expected.limbs.push_back(1);
-  else {
+  if (g_expected.limbs.empty())
+    g_expected.limbs.push_back(1);
+  else
+  {
     std::uint64_t carry = 1;
-    for (std::size_t i = 0; i < g_expected.limbs.size() && carry; ++i) {
+    for (std::size_t i = 0; i < g_expected.limbs.size() && carry; ++i)
+    {
       unsigned __int128 s = (unsigned __int128)g_expected.limbs[i] + carry;
       g_expected.limbs[i] = (std::uint64_t)s;
       carry = (std::uint64_t)(s >> 64);
     }
-    if (carry) g_expected.limbs.push_back(carry);
+    if (carry)
+      g_expected.limbs.push_back(carry);
   }
   g_expected.normalize();
   assert(bi::cmp(kp.pk.g, g_expected) == 0);
@@ -51,7 +112,6 @@ void test_paillier_key_sanity_512()
 
   std::cout << "Paillier key sanity (512-bit) passed.\n";
 }
-
 
 void test_inv_mod_odd_small()
 {
@@ -286,6 +346,8 @@ int main()
   test_inv_mod_odd_small();
   test_paillier_key_sanity_512();
   test_paillier_roundtrip_big();
+  test_encrypt_r_is_coprime();
+  test_paillier_randomized_encryption_big();
   std::cout << "All tests passed.\n";
 
   // std::cout << "lol.\n";

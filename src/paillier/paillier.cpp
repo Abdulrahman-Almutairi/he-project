@@ -3,6 +3,7 @@
 #include "bigint/prime.h"
 #include "bigint/inv.h"
 #include "bigint/div_exact.h"
+#include "bigint/gcd.h"
 #include <iostream>
 #include <random>
 #include <stdexcept>
@@ -20,6 +21,18 @@ namespace he
   using bi::pow_mod_bigexp;
   using bi::pow_mod_u64;
   using bi::to_u64;
+
+  static std::mt19937_64 make_rng()
+  {
+    std::random_device rd;
+    // Seed with multiple 32-bit chunks for better initialization
+    std::seed_seq seq{
+        (std::uint32_t)rd(), (std::uint32_t)rd(), (std::uint32_t)rd(), (std::uint32_t)rd(),
+        (std::uint32_t)rd(), (std::uint32_t)rd(), (std::uint32_t)rd(), (std::uint32_t)rd()};
+    return std::mt19937_64(seq);
+  }
+
+  static thread_local std::mt19937_64 tls_rng = make_rng();
 
   static BigInt to_big(std::uint64_t x) { return BigInt::from_u64(x); }
 
@@ -48,11 +61,8 @@ namespace he
     BigInt n2 = mul_schoolbook(n, n);
 
     // 3) g = n + 1
+    // 3) g = n + 1
     BigInt g = n;
-    // g = bi::add_u64(g, 1); // if you don't have add_u64 globally, see note below
-    if (g.limbs.empty())
-      g.limbs.push_back(1);
-    else
     {
       std::uint64_t carry = 1;
       for (std::size_t i = 0; i < g.limbs.size() && carry; ++i)
@@ -66,16 +76,21 @@ namespace he
     }
     g.normalize();
 
-    // 4) lambda = (p-1)(q-1)  (works with g=n+1 trick)
+    // 4) lambda = lcm(p-1, q-1)
     BigInt pm1 = p;
     sub_inplace(pm1, BigInt::from_u64(1));
+
     BigInt qm1 = q;
     sub_inplace(qm1, BigInt::from_u64(1));
-    BigInt lambda = mul_schoolbook(pm1, qm1);
+
+    BigInt gcd_pm1_qm1 = bi::gcd(pm1, qm1);
+    BigInt prod = mul_schoolbook(pm1, qm1);
+    BigInt lambda = bi::div_exact(prod, gcd_pm1_qm1);
 
     // 5) mu = lambda^{-1} mod n
     BigInt mu = inv_mod_odd(lambda, n);
 
+    // set keys
     kp.pk.n = n;
     kp.pk.n2 = n2;
     kp.pk.g = g;
@@ -96,8 +111,8 @@ namespace he
     // For now we generate random odd r < n and skip gcd check (acceptable for development);
     // later we add BigInt gcd and enforce gcd(r,n)=1.
 
-    std::random_device rd;
-    std::mt19937_64 gen(rd());
+    // std::random_device rd;
+    // std::mt19937_64 gen(rd());
 
     // random r < n (rejection sampling by limbs)
     auto rand_below = [&](const BigInt &limit) -> BigInt
@@ -109,7 +124,7 @@ namespace he
       while (true)
       {
         for (std::size_t i = 0; i < x.limbs.size(); ++i)
-          x.limbs[i] = gen();
+          x.limbs[i] = tls_rng();
         x.normalize();
         if (bi::cmp(x, L) < 0 && !x.limbs.empty())
           return x;
@@ -120,9 +135,21 @@ namespace he
     BigInt n_minus_1 = pk.n;
     bi::sub_inplace(n_minus_1, one);
 
-    BigInt r = rand_below(n_minus_1);
-    r.limbs[0] |= 1ULL; // make it odd
-    r.normalize();
+    BigInt r;
+    while (true)
+    {
+      r = rand_below(n_minus_1);
+      if (r.limbs.empty())
+        continue;
+
+      r.limbs[0] |= 1ULL; // make it odd (optional speedup)
+      r.normalize();
+
+      // enforce r ∈ Z*_n  (i.e., gcd(r, n) == 1)
+      BigInt g = bi::gcd(r, pk.n);
+      if (g.limbs.size() == 1 && g.limbs[0] == 1ULL)
+        break;
+    }
 
     // 3) r^n mod n^2
     // std::uint64_t n_u64 = to_u64(pk.n);
