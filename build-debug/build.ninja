@@ -112,6 +112,13 @@ build CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o: CXX_COMPILER__paill
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/paillier
 
+build CMakeFiles/paillierhe.dir/src/bfv/poly.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bfv/poly.cpp || cmake_object_order_depends_target_paillierhe
+  DEP_FILE = CMakeFiles/paillierhe.dir/src/bfv/poly.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/paillierhe.dir
+  OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bfv
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target paillierhe
@@ -120,7 +127,7 @@ build CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o: CXX_COMPILER__paill
 #############################################
 # Link the static library libpaillierhe.a
 
-build libpaillierhe.a: CXX_STATIC_LIBRARY_LINKER__paillierhe_Debug CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o CMakeFiles/paillierhe.dir/src/bigint/gcd.cpp.o CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o
+build libpaillierhe.a: CXX_STATIC_LIBRARY_LINKER__paillierhe_Debug CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o CMakeFiles/paillierhe.dir/src/bigint/gcd.cpp.o CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o CMakeFiles/paillierhe.dir/src/bfv/poly.cpp.o
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   POST_BUILD = :
@@ -227,6 +234,39 @@ build tests/test_all: CXX_EXECUTABLE_LINKER__test_all_Debug CMakeFiles/test_all.
   TARGET_FILE = tests/test_all
   TARGET_PDB = test_all.dbg
 
+# =============================================================================
+# Object build statements for EXECUTABLE target test_bfv_poly
+
+
+#############################################
+# Order-only phony target for test_bfv_poly
+
+build cmake_object_order_depends_target_test_bfv_poly: phony || cmake_object_order_depends_target_paillierhe
+
+build CMakeFiles/test_bfv_poly.dir/tests/test_bfv_poly.cpp.o: CXX_COMPILER__test_bfv_poly_unscanned_Debug /home/user1/dev/paillier-he/tests/test_bfv_poly.cpp || cmake_object_order_depends_target_test_bfv_poly
+  DEP_FILE = CMakeFiles/test_bfv_poly.dir/tests/test_bfv_poly.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/test_bfv_poly.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_bfv_poly.dir/tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_bfv_poly
+
+
+#############################################
+# Link the executable test_bfv_poly
+
+build test_bfv_poly: CXX_EXECUTABLE_LINKER__test_bfv_poly_Debug CMakeFiles/test_bfv_poly.dir/tests/test_bfv_poly.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
+  LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
+  OBJECT_DIR = CMakeFiles/test_bfv_poly.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test_bfv_poly
+  TARGET_PDB = test_bfv_poly.dbg
+
 
 #############################################
 # Utility command for edit_cache
@@ -269,7 +309,7 @@ build test_all: phony tests/test_all
 #############################################
 # Folder: /home/user1/dev/paillier-he/build-debug
 
-build all: phony libpaillierhe.a bench/bench_all bin/he_cli tests/test_all
+build all: phony libpaillierhe.a bench/bench_all bin/he_cli tests/test_all test_bfv_poly
 
 # =============================================================================
 # Built-in targets
