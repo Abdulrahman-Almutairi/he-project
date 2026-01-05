@@ -14,6 +14,11 @@ add_library(paillierhe
   src/bigint/gcd.cpp
   src/paillier/paillier.cpp
   src/bfv/poly.cpp
+  src/bfv/ntt.cpp
+  src/bfv/keygen.cpp
+  src/bfv/encrypt_decrypt.cpp
+  src/bfv/eval_add.cpp
+  src/bfv/eval_mul.cpp
 )
 target_include_directories(paillierhe PUBLIC include)
 
@@ -31,6 +36,21 @@ set_target_properties(test_all PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINAR
 
 add_executable(test_bfv_poly tests/test_bfv_poly.cpp)
 target_link_libraries(test_bfv_poly PRIVATE paillierhe)
+
+add_executable(test_bfv_ntt tests/test_bfv_ntt.cpp)
+target_link_libraries(test_bfv_ntt PRIVATE paillierhe)
+
+add_executable(test_bfv_keygen tests/test_bfv_keygen.cpp)
+target_link_libraries(test_bfv_keygen PRIVATE paillierhe)
+
+add_executable(test_bfv_encdec tests/test_bfv_encdec.cpp)
+target_link_libraries(test_bfv_encdec PRIVATE paillierhe)
+
+add_executable(test_bfv_add tests/test_bfv_add.cpp)
+target_link_libraries(test_bfv_add PRIVATE paillierhe)
+
+add_executable(test_bfv_mul_raw tests/test_bfv_mul_raw.cpp)
+target_link_libraries(test_bfv_mul_raw PRIVATE paillierhe)
 
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)

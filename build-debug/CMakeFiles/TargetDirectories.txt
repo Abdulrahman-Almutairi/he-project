@@ -3,5 +3,10 @@
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/he_cli.dir
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/test_all.dir
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_poly.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_ntt.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_keygen.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_encdec.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_add.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_mul_raw.dir
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/edit_cache.dir
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/rebuild_cache.dir

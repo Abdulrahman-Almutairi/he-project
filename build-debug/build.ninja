@@ -119,6 +119,41 @@ build CMakeFiles/paillierhe.dir/src/bfv/poly.cpp.o: CXX_COMPILER__paillierhe_uns
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bfv
 
+build CMakeFiles/paillierhe.dir/src/bfv/ntt.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bfv/ntt.cpp || cmake_object_order_depends_target_paillierhe
+  DEP_FILE = CMakeFiles/paillierhe.dir/src/bfv/ntt.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/paillierhe.dir
+  OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bfv
+
+build CMakeFiles/paillierhe.dir/src/bfv/keygen.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bfv/keygen.cpp || cmake_object_order_depends_target_paillierhe
+  DEP_FILE = CMakeFiles/paillierhe.dir/src/bfv/keygen.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/paillierhe.dir
+  OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bfv
+
+build CMakeFiles/paillierhe.dir/src/bfv/encrypt_decrypt.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bfv/encrypt_decrypt.cpp || cmake_object_order_depends_target_paillierhe
+  DEP_FILE = CMakeFiles/paillierhe.dir/src/bfv/encrypt_decrypt.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/paillierhe.dir
+  OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bfv
+
+build CMakeFiles/paillierhe.dir/src/bfv/eval_add.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bfv/eval_add.cpp || cmake_object_order_depends_target_paillierhe
+  DEP_FILE = CMakeFiles/paillierhe.dir/src/bfv/eval_add.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/paillierhe.dir
+  OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bfv
+
+build CMakeFiles/paillierhe.dir/src/bfv/eval_mul.cpp.o: CXX_COMPILER__paillierhe_unscanned_Debug /home/user1/dev/paillier-he/src/bfv/eval_mul.cpp || cmake_object_order_depends_target_paillierhe
+  DEP_FILE = CMakeFiles/paillierhe.dir/src/bfv/eval_mul.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/paillierhe.dir
+  OBJECT_FILE_DIR = CMakeFiles/paillierhe.dir/src/bfv
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target paillierhe
@@ -127,7 +162,7 @@ build CMakeFiles/paillierhe.dir/src/bfv/poly.cpp.o: CXX_COMPILER__paillierhe_uns
 #############################################
 # Link the static library libpaillierhe.a
 
-build libpaillierhe.a: CXX_STATIC_LIBRARY_LINKER__paillierhe_Debug CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o CMakeFiles/paillierhe.dir/src/bigint/gcd.cpp.o CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o CMakeFiles/paillierhe.dir/src/bfv/poly.cpp.o
+build libpaillierhe.a: CXX_STATIC_LIBRARY_LINKER__paillierhe_Debug CMakeFiles/paillierhe.dir/src/bigint/bigint.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mul_schoolbook.cpp.o CMakeFiles/paillierhe.dir/src/bigint/mod_arith.cpp.o CMakeFiles/paillierhe.dir/src/bigint/montgomery.cpp.o CMakeFiles/paillierhe.dir/src/bigint/prime.cpp.o CMakeFiles/paillierhe.dir/src/bigint/inv.cpp.o CMakeFiles/paillierhe.dir/src/bigint/div_exact.cpp.o CMakeFiles/paillierhe.dir/src/bigint/gcd.cpp.o CMakeFiles/paillierhe.dir/src/paillier/paillier.cpp.o CMakeFiles/paillierhe.dir/src/bfv/poly.cpp.o CMakeFiles/paillierhe.dir/src/bfv/ntt.cpp.o CMakeFiles/paillierhe.dir/src/bfv/keygen.cpp.o CMakeFiles/paillierhe.dir/src/bfv/encrypt_decrypt.cpp.o CMakeFiles/paillierhe.dir/src/bfv/eval_add.cpp.o CMakeFiles/paillierhe.dir/src/bfv/eval_mul.cpp.o
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = CMakeFiles/paillierhe.dir
   POST_BUILD = :
@@ -267,6 +302,171 @@ build test_bfv_poly: CXX_EXECUTABLE_LINKER__test_bfv_poly_Debug CMakeFiles/test_
   TARGET_FILE = test_bfv_poly
   TARGET_PDB = test_bfv_poly.dbg
 
+# =============================================================================
+# Object build statements for EXECUTABLE target test_bfv_ntt
+
+
+#############################################
+# Order-only phony target for test_bfv_ntt
+
+build cmake_object_order_depends_target_test_bfv_ntt: phony || cmake_object_order_depends_target_paillierhe
+
+build CMakeFiles/test_bfv_ntt.dir/tests/test_bfv_ntt.cpp.o: CXX_COMPILER__test_bfv_ntt_unscanned_Debug /home/user1/dev/paillier-he/tests/test_bfv_ntt.cpp || cmake_object_order_depends_target_test_bfv_ntt
+  DEP_FILE = CMakeFiles/test_bfv_ntt.dir/tests/test_bfv_ntt.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/test_bfv_ntt.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_bfv_ntt.dir/tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_bfv_ntt
+
+
+#############################################
+# Link the executable test_bfv_ntt
+
+build test_bfv_ntt: CXX_EXECUTABLE_LINKER__test_bfv_ntt_Debug CMakeFiles/test_bfv_ntt.dir/tests/test_bfv_ntt.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
+  LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
+  OBJECT_DIR = CMakeFiles/test_bfv_ntt.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test_bfv_ntt
+  TARGET_PDB = test_bfv_ntt.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_bfv_keygen
+
+
+#############################################
+# Order-only phony target for test_bfv_keygen
+
+build cmake_object_order_depends_target_test_bfv_keygen: phony || cmake_object_order_depends_target_paillierhe
+
+build CMakeFiles/test_bfv_keygen.dir/tests/test_bfv_keygen.cpp.o: CXX_COMPILER__test_bfv_keygen_unscanned_Debug /home/user1/dev/paillier-he/tests/test_bfv_keygen.cpp || cmake_object_order_depends_target_test_bfv_keygen
+  DEP_FILE = CMakeFiles/test_bfv_keygen.dir/tests/test_bfv_keygen.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/test_bfv_keygen.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_bfv_keygen.dir/tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_bfv_keygen
+
+
+#############################################
+# Link the executable test_bfv_keygen
+
+build test_bfv_keygen: CXX_EXECUTABLE_LINKER__test_bfv_keygen_Debug CMakeFiles/test_bfv_keygen.dir/tests/test_bfv_keygen.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
+  LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
+  OBJECT_DIR = CMakeFiles/test_bfv_keygen.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test_bfv_keygen
+  TARGET_PDB = test_bfv_keygen.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_bfv_encdec
+
+
+#############################################
+# Order-only phony target for test_bfv_encdec
+
+build cmake_object_order_depends_target_test_bfv_encdec: phony || cmake_object_order_depends_target_paillierhe
+
+build CMakeFiles/test_bfv_encdec.dir/tests/test_bfv_encdec.cpp.o: CXX_COMPILER__test_bfv_encdec_unscanned_Debug /home/user1/dev/paillier-he/tests/test_bfv_encdec.cpp || cmake_object_order_depends_target_test_bfv_encdec
+  DEP_FILE = CMakeFiles/test_bfv_encdec.dir/tests/test_bfv_encdec.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/test_bfv_encdec.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_bfv_encdec.dir/tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_bfv_encdec
+
+
+#############################################
+# Link the executable test_bfv_encdec
+
+build test_bfv_encdec: CXX_EXECUTABLE_LINKER__test_bfv_encdec_Debug CMakeFiles/test_bfv_encdec.dir/tests/test_bfv_encdec.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
+  LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
+  OBJECT_DIR = CMakeFiles/test_bfv_encdec.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test_bfv_encdec
+  TARGET_PDB = test_bfv_encdec.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_bfv_add
+
+
+#############################################
+# Order-only phony target for test_bfv_add
+
+build cmake_object_order_depends_target_test_bfv_add: phony || cmake_object_order_depends_target_paillierhe
+
+build CMakeFiles/test_bfv_add.dir/tests/test_bfv_add.cpp.o: CXX_COMPILER__test_bfv_add_unscanned_Debug /home/user1/dev/paillier-he/tests/test_bfv_add.cpp || cmake_object_order_depends_target_test_bfv_add
+  DEP_FILE = CMakeFiles/test_bfv_add.dir/tests/test_bfv_add.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/test_bfv_add.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_bfv_add.dir/tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_bfv_add
+
+
+#############################################
+# Link the executable test_bfv_add
+
+build test_bfv_add: CXX_EXECUTABLE_LINKER__test_bfv_add_Debug CMakeFiles/test_bfv_add.dir/tests/test_bfv_add.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
+  LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
+  OBJECT_DIR = CMakeFiles/test_bfv_add.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test_bfv_add
+  TARGET_PDB = test_bfv_add.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target test_bfv_mul_raw
+
+
+#############################################
+# Order-only phony target for test_bfv_mul_raw
+
+build cmake_object_order_depends_target_test_bfv_mul_raw: phony || cmake_object_order_depends_target_paillierhe
+
+build CMakeFiles/test_bfv_mul_raw.dir/tests/test_bfv_mul_raw.cpp.o: CXX_COMPILER__test_bfv_mul_raw_unscanned_Debug /home/user1/dev/paillier-he/tests/test_bfv_mul_raw.cpp || cmake_object_order_depends_target_test_bfv_mul_raw
+  DEP_FILE = CMakeFiles/test_bfv_mul_raw.dir/tests/test_bfv_mul_raw.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fopenmp
+  INCLUDES = -I/home/user1/dev/paillier-he/include
+  OBJECT_DIR = CMakeFiles/test_bfv_mul_raw.dir
+  OBJECT_FILE_DIR = CMakeFiles/test_bfv_mul_raw.dir/tests
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target test_bfv_mul_raw
+
+
+#############################################
+# Link the executable test_bfv_mul_raw
+
+build test_bfv_mul_raw: CXX_EXECUTABLE_LINKER__test_bfv_mul_raw_Debug CMakeFiles/test_bfv_mul_raw.dir/tests/test_bfv_mul_raw.cpp.o | libpaillierhe.a /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a || libpaillierhe.a
+  FLAGS = -g
+  LINK_LIBRARIES = libpaillierhe.a  /usr/lib/gcc/x86_64-linux-gnu/13/libgomp.so  /usr/lib/x86_64-linux-gnu/libpthread.a
+  OBJECT_DIR = CMakeFiles/test_bfv_mul_raw.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test_bfv_mul_raw
+  TARGET_PDB = test_bfv_mul_raw.dbg
+
 
 #############################################
 # Utility command for edit_cache
@@ -309,7 +509,7 @@ build test_all: phony tests/test_all
 #############################################
 # Folder: /home/user1/dev/paillier-he/build-debug
 
-build all: phony libpaillierhe.a bench/bench_all bin/he_cli tests/test_all test_bfv_poly
+build all: phony libpaillierhe.a bench/bench_all bin/he_cli tests/test_all test_bfv_poly test_bfv_ntt test_bfv_keygen test_bfv_encdec test_bfv_add test_bfv_mul_raw
 
 # =============================================================================
 # Built-in targets
