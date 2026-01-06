@@ -38,8 +38,8 @@ namespace bfv
     KeyPair keygen(const Params &p, std::mt19937_64 &rng)
     {
         // For now, we only support the toy NTT params, to keep correctness tight.
-        if (p.N != 8 || p.q != 97)
-            throw std::runtime_error("toy keygen expects Params{N=8,q=97,...} (generalization comes next)");
+        // if (p.N != 8 || p.q != 97)
+        //     throw std::runtime_error("toy keygen expects Params{N=8,q=97,...} (generalization comes next)");
 
         KeyPair kp;
         kp.sk.s = sample_ternary(p, rng);
@@ -48,7 +48,7 @@ namespace bfv
         Poly e = sample_small_error(p, rng);
 
         // Compute a*s using fast negacyclic multiplication (NTT)
-        Poly as = mul_negacyclic_ntt(a, kp.sk.s);
+        Poly as = mul_negacyclic_ntt(p, a, kp.sk.s);
 
         // b = -(a*s + e) mod q
         Poly b(p);
@@ -65,8 +65,8 @@ namespace bfv
 
     KeyPair keygen_noiseless(const Params &p, std::mt19937_64 &rng)
     {
-        if (p.N != 8 || p.q != 97)
-            throw std::runtime_error("toy keygen_noiseless expects Params{N=8,q=97}");
+        // if (p.N != 8 || p.q != 97)
+        //     throw std::runtime_error("toy keygen_noiseless expects Params{N=8,q=97}");
 
         KeyPair kp;
         kp.sk.s = sample_ternary(p, rng);
@@ -78,7 +78,7 @@ namespace bfv
         for (std::size_t i = 0; i < p.N; ++i)
             e[i] = 0;
 
-        Poly as = mul_negacyclic_ntt(a, kp.sk.s);
+        Poly as = mul_negacyclic_ntt(p, a, kp.sk.s);
 
         // b = -(a*s + e) = -(a*s)
         Poly b(p);

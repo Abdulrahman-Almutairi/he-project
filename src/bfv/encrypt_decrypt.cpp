@@ -26,8 +26,8 @@ namespace bfv
 
     Ciphertext encrypt_const(const Params &p, const PublicKey &pk, std::uint64_t m, std::mt19937_64 &rng)
     {
-        if (p.N != 8 || p.q != 97)
-            throw std::runtime_error("toy encrypt expects Params{N=8,q=97}");
+        // if (p.N != 8 || p.q != 97)
+        //     throw std::runtime_error("toy encrypt expects Params{N=8,q=97}");
 
         // message poly in R_t (constant)
         Poly mp = encode_const(p, m);
@@ -46,7 +46,7 @@ namespace bfv
         Poly e2 = sample_small_error(p, rng);
 
         // c0 = b*u + e1 + scaled
-        Poly bu = mul_negacyclic_ntt(pk.b, u);
+        Poly bu = mul_negacyclic_ntt(p, pk.b, u);
         Poly c0(p);
         for (std::size_t i = 0; i < p.N; ++i)
         {
@@ -55,7 +55,7 @@ namespace bfv
         }
 
         // c1 = a*u + e2
-        Poly au = mul_negacyclic_ntt(pk.a, u);
+        Poly au = mul_negacyclic_ntt(p, pk.a, u);
         Poly c1(p);
         for (std::size_t i = 0; i < p.N; ++i)
             c1[i] = add_mod(au[i], e2[i], p.q);
@@ -68,8 +68,8 @@ namespace bfv
 
     Ciphertext encrypt_const_noiseless(const Params &p, const PublicKey &pk, std::uint64_t m, std::mt19937_64 &rng)
     {
-        if (p.N != 8 || p.q != 97)
-            throw std::runtime_error("toy encrypt expects Params{N=8,q=97}");
+        // if (p.N != 8 || p.q != 97)
+        //     throw std::runtime_error("toy encrypt expects Params{N=8,q=97}");
 
         // message poly in R_t (constant)
         Poly mp = encode_const(p, m);
@@ -87,13 +87,13 @@ namespace bfv
         Poly zero(p); // all zeros
 
         // c0 = b*u + scaled
-        Poly bu = mul_negacyclic_ntt(pk.b, u);
+        Poly bu = mul_negacyclic_ntt(p, pk.b, u);
         Poly c0(p);
         for (std::size_t i = 0; i < p.N; ++i)
             c0[i] = add_mod(bu[i], scaled[i], p.q);
 
         // c1 = a*u
-        Poly au = mul_negacyclic_ntt(pk.a, u);
+        Poly au = mul_negacyclic_ntt(p, pk.a, u);
         Poly c1(p);
         for (std::size_t i = 0; i < p.N; ++i)
             c1[i] = au[i];
@@ -106,11 +106,11 @@ namespace bfv
 
     std::uint64_t decrypt_const(const Params &p, const SecretKey &sk, const Ciphertext &ct)
     {
-        if (p.N != 8 || p.q != 97)
-            throw std::runtime_error("toy decrypt expects Params{N=8,q=97}");
+        // if (p.N != 8 || p.q != 97)
+        //     throw std::runtime_error("toy decrypt expects Params{N=8,q=97}");
 
         // v = c0 + c1*s mod q
-        Poly c1s = mul_negacyclic_ntt(ct.c1, sk.s);
+        Poly c1s = mul_negacyclic_ntt(p, ct.c1, sk.s);
         Poly v(p);
         for (std::size_t i = 0; i < p.N; ++i)
             v[i] = add_mod(ct.c0[i], c1s[i], p.q);

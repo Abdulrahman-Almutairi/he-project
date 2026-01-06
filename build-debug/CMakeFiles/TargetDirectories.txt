@@ -8,5 +8,11 @@
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_encdec.dir
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_add.dir
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_mul_raw.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_relin.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_mul_relin.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_noise.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_ntt_big.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/test_bfv_gemm.dir
+/home/user1/dev/paillier-he/build-debug/CMakeFiles/bench_bfv_gemm.dir
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/edit_cache.dir
 /home/user1/dev/paillier-he/build-debug/CMakeFiles/rebuild_cache.dir

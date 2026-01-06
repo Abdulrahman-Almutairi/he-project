@@ -1,5 +1,6 @@
 #include "bfv/bfv.h"
 #include "bfv/ntt.h"
+#include "bfv/relin.h"
 #include <stdexcept>
 
 namespace bfv
@@ -9,15 +10,15 @@ namespace bfv
         Ciphertext3 r(p);
 
         // r0 = x0*y0
-        r.c0 = mul_negacyclic_ntt(x.c0, y.c0);
+        r.c0 = mul_negacyclic_ntt(p, x.c0, y.c0);
 
         // r1 = x0*y1 + x1*y0
-        Poly x0y1 = mul_negacyclic_ntt(x.c0, y.c1);
-        Poly x1y0 = mul_negacyclic_ntt(x.c1, y.c0);
+        Poly x0y1 = mul_negacyclic_ntt(p, x.c0, y.c1);
+        Poly x1y0 = mul_negacyclic_ntt(p, x.c1, y.c0);
         r.c1 = add(x0y1, x1y0);
 
         // r2 = x1*y1
-        r.c2 = mul_negacyclic_ntt(x.c1, y.c1);
+        r.c2 = mul_negacyclic_ntt(p, x.c1, y.c1);
 
         return r;
     }
@@ -83,9 +84,9 @@ namespace bfv
         return r;
     }
 
-    Ciphertext3 mul(const Params &p, const Ciphertext &x, const Ciphertext &y)
+    Ciphertext mul(const Params &p, const Ciphertext &x, const Ciphertext &y, const RelinKey &rlk)
     {
-        auto raw = mul_raw(p, x, y);
-        return rescale_delta(p, raw);
+        auto ct3 = mul_raw(p, x, y);
+        return relinearize(p, ct3, rlk);
     }
 }

@@ -1,14 +1,11 @@
 #pragma once
-#include "bfv/poly.h"
+#include "bfv/bfv.h"
 
 namespace bfv
 {
-  // Forward negacyclic NTT (in-place)
-  void ntt(Poly &a);
+  // Negacyclic NTT in R_q = Z_q[X]/(X^N + 1)
+  void ntt(const Params &p, Poly &a);
+  void intt(const Params &p, Poly &a);
 
-  // Inverse negacyclic NTT (in-place)
-  void intt(Poly &a);
-
-  // Multiply using NTT (drop-in replacement for schoolbook)
-  Poly mul_negacyclic_ntt(const Poly &a, const Poly &b);
+  Poly mul_negacyclic_ntt(const Params &p, const Poly &a, const Poly &b);
 }

@@ -5,7 +5,7 @@
 
 static void test_poly_add_sub_mul()
 {
-    bfv::Params P{8, 97, 17}; // small demo: N=8, q prime=97, t=17
+    bfv::Params P{1024, 12289, 2}; // small demo: N=8, q prime=97, t=17
     bfv::Poly a(P), b(P);
 
     a[0] = 3;

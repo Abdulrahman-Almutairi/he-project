@@ -6,7 +6,7 @@
 int main()
 {
     // Keep toy params where enc/dec passed
-    bfv::Params P{8, 97, 2};
+    bfv::Params P{1024, 12289, 2};
     std::mt19937_64 rng(123);
 
     auto kp = bfv::keygen_noiseless(P, rng);
@@ -26,9 +26,9 @@ int main()
             // v = c0 + c1*s + c2*s^2  (mod q), then decode.
             //
             // This is the "true" decrypt for 3-part ciphertexts.
-            auto c1s = bfv::mul_negacyclic_ntt(prod3.c1, kp.sk.s);
-            auto s2 = bfv::mul_negacyclic_ntt(kp.sk.s, kp.sk.s);
-            auto c2s2 = bfv::mul_negacyclic_ntt(prod3.c2, s2);
+            auto c1s = bfv::mul_negacyclic_ntt(P, prod3.c1, kp.sk.s);
+            auto s2 = bfv::mul_negacyclic_ntt(P, kp.sk.s, kp.sk.s);
+            auto c2s2 = bfv::mul_negacyclic_ntt(P, prod3.c2, s2);
 
             bfv::Poly v(P);
             for (std::size_t i = 0; i < P.N; ++i)

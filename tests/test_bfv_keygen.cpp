@@ -4,7 +4,7 @@
 
 int main()
 {
-  bfv::Params P{8, 97, 17};
+  bfv::Params P{1024, 12289, 2};
   std::mt19937_64 rng(123);
 
   auto kp = bfv::keygen(P, rng);

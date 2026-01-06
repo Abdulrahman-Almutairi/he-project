@@ -7,6 +7,9 @@
 
 namespace bfv
 {
+
+  struct RelinKey;
+
   // Key generation
   KeyPair keygen(const Params &p, std::mt19937_64 &rng);
 
@@ -37,4 +40,6 @@ namespace bfv
   Ciphertext3 mul(const Params &p, const Ciphertext &x, const Ciphertext &y);
 
   KeyPair keygen_noiseless(const Params &p, std::mt19937_64 &rng);
+
+  Ciphertext mul(const Params &p, const Ciphertext &x, const Ciphertext &y, const RelinKey &rlk);
 }

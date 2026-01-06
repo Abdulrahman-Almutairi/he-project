@@ -19,6 +19,9 @@ add_library(paillierhe
   src/bfv/encrypt_decrypt.cpp
   src/bfv/eval_add.cpp
   src/bfv/eval_mul.cpp
+  src/bfv/relin.cpp
+  src/bfv/noise.cpp
+  src/bfv/eval_gemm.cpp
 )
 target_include_directories(paillierhe PUBLIC include)
 
@@ -51,6 +54,24 @@ target_link_libraries(test_bfv_add PRIVATE paillierhe)
 
 add_executable(test_bfv_mul_raw tests/test_bfv_mul_raw.cpp)
 target_link_libraries(test_bfv_mul_raw PRIVATE paillierhe)
+
+add_executable(test_bfv_relin tests/test_bfv_relin.cpp)
+target_link_libraries(test_bfv_relin PRIVATE paillierhe)
+
+add_executable(test_bfv_mul_relin tests/test_bfv_mul_relin.cpp)
+target_link_libraries(test_bfv_mul_relin PRIVATE paillierhe)
+
+add_executable(test_bfv_noise tests/test_bfv_noise.cpp)
+target_link_libraries(test_bfv_noise PRIVATE paillierhe)
+
+add_executable(test_bfv_ntt_big tests/test_bfv_ntt_big.cpp)
+target_link_libraries(test_bfv_ntt_big PRIVATE paillierhe)
+
+add_executable(test_bfv_gemm tests/test_bfv_gemm.cpp)
+target_link_libraries(test_bfv_gemm PRIVATE paillierhe)
+
+add_executable(bench_bfv_gemm bench/bench_bfv_gemm.cpp)
+target_link_libraries(bench_bfv_gemm PRIVATE paillierhe)
 
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)

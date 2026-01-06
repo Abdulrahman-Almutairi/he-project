@@ -1,0 +1,2 @@
+N,q,t,A_rows,A_cols,B_cols,ms_keygen,ms_encrypt,ms_gemm,ms_decrypt
+1024,12289,2,32,32,32,8.49632,2698.48,362045,627.774
